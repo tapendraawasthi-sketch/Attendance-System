@@ -393,7 +393,7 @@ app.post('/api/admin/trigger-summary', authenticateToken, (req, res) => {
 // Serve the built React/Vite frontend for all non-API routes
 const distPath = path.join(__dirname, '..', 'dist');
 app.use(express.static(distPath));
-app.get('*', (req, res) => {
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
