@@ -34,7 +34,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   
   // WhatsApp Chat state
-  const [activeContact, setActiveContact] = useState(contacts[0]);
+  const [activeContact, setActiveContact] = useState(null);
   const [chatInput, setChatInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
@@ -61,11 +61,15 @@ export default function AdminDashboard() {
     }
   }, [chatMessages, activeContact, isTyping]);
   
-  // Ensure active contact stays in sync if global contacts update
   useEffect(() => {
+    if (!activeContact) {
+      // Auto-select first contact once contacts load
+      if (contacts.length > 0) setActiveContact(contacts[0]);
+      return;
+    }
     const updatedContact = contacts.find(c => c.id === activeContact.id);
     if (updatedContact) setActiveContact(updatedContact);
-  }, [contacts, activeContact.id]);
+  }, [contacts, activeContact?.id]);
 
   const handleApproveLeave = async (id) => {
     try {
@@ -742,7 +746,8 @@ export default function AdminDashboard() {
               </div>
 
               {/* WhatsApp Main Chat Area */}
-              <div className="wa-chat-area">
+              {activeContact ? (
+                <div className="wa-chat-area">
                 <div className="wa-chat-header">
                   <div className="wa-avatar" style={{ width: '40px', height: '40px' }}>
                     {activeContact.name.charAt(0)}
@@ -800,6 +805,11 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </div>
+              ) : (
+                <div className="wa-chat-area" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8696a0' }}>
+                  Select a contact to start messaging
+                </div>
+              )}
               
             </div>
           )}
