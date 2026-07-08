@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { UserCircle, Lock, Loader2, AlertCircle } from 'lucide-react';
-import axios from 'axios';
+import { api } from '../context/AppContext';
 
 export default function Login() {
   const [idNumber, setIdNumber] = useState('');
@@ -19,7 +19,7 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await api.post('/auth/login', {
         idNumber,
         password
       });
