@@ -6,7 +6,7 @@ const AppContext = createContext();
 
 // Create an axios instance for the API
 export const api = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: '/api'
 });
 
 export function AppProvider({ children }) {
@@ -175,7 +175,7 @@ export function AppProvider({ children }) {
     fetchData();
 
     // Initialize Socket.io
-    const socket = io('http://localhost:5000');
+    const socket = io(window.location.origin);
     socketRef.current = socket;
 
     // Request Notification Permissions
