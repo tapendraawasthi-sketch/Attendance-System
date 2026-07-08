@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -387,6 +388,13 @@ app.post('/api/admin/trigger-summary', authenticateToken, (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
   generateAndSendSummary();
   res.json({ success: true, message: 'Summary email triggered. Check server logs for Preview URL.' });
+});
+
+// Serve the built React/Vite frontend for all non-API routes
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 server.listen(PORT, () => {
